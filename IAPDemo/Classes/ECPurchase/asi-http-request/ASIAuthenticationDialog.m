@@ -28,7 +28,7 @@ NSLock *dialogLock = nil;
 + (void)presentProxyAuthenticationDialogForRequest:(ASIHTTPRequest *)request
 {
 	[dialogLock lock];
-	//[sharedDialog release];
+	[sharedDialog release];
 	sharedDialog = [[self alloc] init];
 	[sharedDialog setRequest:request];
 	[sharedDialog setType:ASIProxyAuthenticationType];
@@ -39,7 +39,7 @@ NSLock *dialogLock = nil;
 + (void)presentAuthenticationDialogForRequest:(ASIHTTPRequest *)request
 {
 	[dialogLock lock];
-	//[sharedDialog release];
+	[sharedDialog release];
 	sharedDialog = [[self alloc] init];
 	[sharedDialog setRequest:request];
 	[sharedDialog show];
@@ -50,12 +50,12 @@ NSLock *dialogLock = nil;
 - (void)show
 {
 	// Create an action sheet to show the login dialog
-	[self setLoginDialog:[[UIActionSheet alloc] init]];
+	[self setLoginDialog:[[[UIActionSheet alloc] init] autorelease]];
 	[[self loginDialog] setActionSheetStyle:UIActionSheetStyleBlackOpaque];
 	[[self loginDialog] setDelegate:self];
 	
 	// We show the login form in a table view, similar to Safari's authentication dialog
-	UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0,80,320,480) style:UITableViewStyleGrouped];
+	UITableView *table = [[[UITableView alloc] initWithFrame:CGRectMake(0,80,320,480) style:UITableViewStyleGrouped] autorelease];
 	[table setDelegate:self];
 	[table setDataSource:self];
 	[[self loginDialog] addSubview:table];
@@ -63,8 +63,8 @@ NSLock *dialogLock = nil;
 	[[self loginDialog] setFrame:CGRectMake(0,0,320,480)];
 	
 	// Setup the title (Couldn't figure out how to put this in the same toolbar as the buttons)
-	UIToolbar *titleBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0,0,320,30)];
-	UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10,0,300,30)];
+	UIToolbar *titleBar = [[[UIToolbar alloc] initWithFrame:CGRectMake(0,0,320,30)] autorelease];
+	UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(10,0,300,30)] autorelease];
 	if ([self type] == ASIProxyAuthenticationType) {
 		[label setText:@"Login to this secure proxy server."];
 	} else {
@@ -82,13 +82,13 @@ NSLock *dialogLock = nil;
 	[[self loginDialog] addSubview:titleBar];
 	
 	// Setup the toolbar 
-	UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0,30,320,50)];
+	UIToolbar *toolbar = [[[UIToolbar alloc] initWithFrame:CGRectMake(0,30,320,50)] autorelease];
 
-	NSMutableArray *items = [[NSMutableArray alloc] init];
-	UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAuthenticationFromDialog:)];
+	NSMutableArray *items = [[[NSMutableArray alloc] init] autorelease];
+	UIBarButtonItem *backButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAuthenticationFromDialog:)] autorelease];
 	[items addObject:backButton];
 	
-	label = [[UILabel alloc] initWithFrame:CGRectMake(0,0,170,50)];
+	label = [[[UILabel alloc] initWithFrame:CGRectMake(0,0,170,50)] autorelease];
 	if ([self type] == ASIProxyAuthenticationType) {
 		[label setText:[[self request] proxyHost]];
 	} else {
@@ -104,10 +104,10 @@ NSLock *dialogLock = nil;
 	
 	[toolbar addSubview:label];
 
-	UIBarButtonItem *labelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:nil action:nil];
+	UIBarButtonItem *labelButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:nil action:nil] autorelease];
 	[labelButton setCustomView:label];
 	[items addObject:labelButton];
-	[items addObject:[[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStyleDone target:self action:@selector(loginWithCredentialsFromDialog:)]];
+	[items addObject:[[[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStyleDone target:self action:@selector(loginWithCredentialsFromDialog:)] autorelease]];
 	[toolbar setItems:items];
 	
 	[[self loginDialog] addSubview:toolbar];
@@ -191,11 +191,11 @@ NSLock *dialogLock = nil;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_3_0
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:nil] autorelease];
 #else
-	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
 #endif
 
 	[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(20,12,260,25)];
+	UITextField *textField = [[[UITextField alloc] initWithFrame:CGRectMake(20,12,260,25)] autorelease];
 	[textField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
 	if ([indexPath section] == 0) {
 		[textField setPlaceholder:@"User"];

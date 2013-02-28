@@ -96,6 +96,7 @@
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"iap4" message:[NSString stringWithFormat:@"%@", transaction.error]
 													   delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
+		[alert release];
         // Optionally, display an error here.
     }
     [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
@@ -117,6 +118,13 @@
 	
 }
 
+-(void)dealloc
+{
+	RELEASE_SAFELY(_completeTrans);
+	RELEASE_SAFELY(_failedTrans);
+	RELEASE_SAFELY(_restoreTrans);
+	[super dealloc];
+}
 
 @end
 

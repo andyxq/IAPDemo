@@ -18,5 +18,5 @@
 + (id)inputStreamWithFileAtPath:(NSString *)path;
 + (id)inputStreamWithData:(NSData *)data;
 
-@property (strong) NSInputStream *stream;
+@property (retain) NSInputStream *stream;
 @end

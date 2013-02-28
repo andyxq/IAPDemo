@@ -18,8 +18,6 @@
 #define RELEASE_SAFELY(__POINTER) { [__POINTER release]; __POINTER = nil; }
 #endif
 
-#define ECPURCHASE_TEST_SERVER
-
 #ifdef ECPURCHASE_TEST_SERVER
 #define VAILDATING_RECEIPTS_URL @"https://sandbox.itunes.apple.com/verifyReceipt"
 #else
@@ -71,7 +69,25 @@ return nil;                                         \
 {                                                   \
 return self;                                        \
 }                                                   \
-
+\
+- (id)retain                                        \
+{                                                   \
+return self;                                        \
+}                                                   \
+\
+- (unsigned)retainCount                             \
+{                                                   \
+return UINT_MAX;                                    \
+}                                                   \
+\
+- (void)release                                     \
+{                                                   \
+}                                                   \
+\
+- (id)autorelease                                   \
+{                                                   \
+return self;                                        \
+}
 #endif
 
 /**************************************
@@ -124,7 +140,7 @@ typedef enum {
 @interface ECPurchaseHTTPRequest:ASIHTTPRequest{
 	NSString *_productIdentifier;
 }
-@property(nonatomic,strong) NSString *productIdentifier;
+@property(nonatomic,retain) NSString *productIdentifier;
 @end
 
 /******************************
@@ -132,15 +148,15 @@ typedef enum {
  ******************************/
 @interface ECPurchase : NSObject <SKProductsRequestDelegate>{
     SKProductsRequest		*_productsRequest;
-	id<ECPurchaseProductDelegate>	__unsafe_unretained _productDelegate;
-	id<ECPurchaseTransactionDelegate>	__unsafe_unretained _transactionDelegate;
+	id<ECPurchaseProductDelegate>	_productDelegate;
+	id<ECPurchaseTransactionDelegate>	_transactionDelegate;
 	ECStoreObserver			*_storeObserver;
 	ASINetworkQueue			*_networkQueue;
 	ECVerifyRecepitMode		_verifyRecepitMode;
 }
 SINGLETON_INTERFACE(ECPurchase);
-@property(unsafe_unretained) id<ECPurchaseProductDelegate> productDelegate;
-@property(unsafe_unretained) id<ECPurchaseTransactionDelegate> transactionDelegate;
+@property(assign) id<ECPurchaseProductDelegate> productDelegate;
+@property(assign) id<ECPurchaseTransactionDelegate> transactionDelegate;
 //verify recepit mode,enum ECVerifyRecepitMode,default is ECVerifyRecepitModeNone
 @property(assign) ECVerifyRecepitMode verifyRecepitMode;
 -(void)postInit;

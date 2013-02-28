@@ -21,9 +21,9 @@
 	NSMutableArray	*_failedTrans;
 	NSMutableArray	*_restoreTrans;
 }
-@property(nonatomic, strong)NSMutableArray *completeTrans;
-@property(nonatomic, strong)NSMutableArray *failedTrans;
-@property(nonatomic, strong)NSMutableArray *restoreTrans;
+@property(nonatomic, retain)NSMutableArray *completeTrans;
+@property(nonatomic, retain)NSMutableArray *failedTrans;
+@property(nonatomic, retain)NSMutableArray *restoreTrans;
 
 - (void)recordTransaction:(SKPaymentTransaction *)transaction withStatus:(int)status;
 - (void)provideContent:(NSString *)productIdentifier;

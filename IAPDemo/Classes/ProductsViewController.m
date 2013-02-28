@@ -9,6 +9,8 @@
 #import "ProductsViewController.h"
 #import "IAPHandler.h"
 
+#define PRODUCT_ID   @"com.youthcode.MyTreasure.pureVersion" 
+
 @interface ProductsViewController ()
 - (void)registIapObservers;
 @end
@@ -22,7 +24,7 @@
     [self registIapObservers];
     [IAPHandler initECPurchaseWithHandler];
     //iap产品编号集合，这里你需要替换为你自己的iap列表
-    NSArray *productIds = [NSArray arrayWithObjects:@"com.youthcode.MyTreasure.pureVersion", nil];
+    NSArray *productIds = [NSArray arrayWithObjects:PRODUCT_ID, nil];
     //从AppStore上获取产品信息
     [[ECPurchase shared]requestProductData:productIds];
 }
@@ -43,7 +45,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.accessoryType =  UITableViewCellAccessoryNone;
     } else {
@@ -102,9 +104,14 @@
     if (!products_ || [products_ count] == 0) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"IPA Demo" message:@"获取不到产品列表，请确定已经在itunes connect注册了产品，并且配置无误！" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] ;
         [alert show];
+        [alert release];
     }
-
-    [self.tableView reloadData]; 
+    [self.tableView reloadData];
+    
+    //if (products_) {
+    //    [products_ release];
+    //    products_ = nil;
+    // }
 }
 
 // 注册IapHander的监听器，并不是所有监听器都需要注册，
@@ -148,6 +155,7 @@
                                          cancelButtonTitle:@"OK" 
                                          otherButtonTitles:nil, nil];
     [alert show];
+    [alert release];
 }
 
 -(void) failedTransaction:(NSNotification*)notification

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ECPurchase.h"
 
-@interface ProductsViewController : UITableViewController<ECPurchaseTransactionDelegate, ECPurchaseProductDelegate>
+@interface ProductsViewController : UITableViewController
 {
     NSArray *products_;
 }

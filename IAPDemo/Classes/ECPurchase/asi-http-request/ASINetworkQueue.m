@@ -32,7 +32,7 @@
 
 + (id)queue
 {
-	return [[self alloc] init];
+	return [[[self alloc] init] autorelease];
 }
 
 - (void)dealloc
@@ -41,6 +41,8 @@
 	for (ASIHTTPRequest *request in [self operations]) {
 		[request setQueue:nil];
 	}
+	[userInfo release];
+	[super dealloc];
 }
 
 - (BOOL)isNetworkActive

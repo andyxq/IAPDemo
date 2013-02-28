@@ -77,12 +77,12 @@ typedef enum {
 @property BOOL networkStatusNotificationsEnabled;
 // The remote host whose reachability will be queried.
 // Either this or 'addressName' must be set.
-@property (nonatomic, strong) NSString *hostName;
+@property (nonatomic, retain) NSString *hostName;
 // The IP address of the remote host whose reachability will be queried.
 // Either this or 'hostName' must be set.
-@property (nonatomic, strong) NSString *address;
+@property (nonatomic, retain) NSString *address;
 // A cache of ReachabilityQuery objects, which encapsulate a SCNetworkReachabilityRef, a host or address, and a run loop. The keys are host names or addresses.
-@property (nonatomic, strong) NSMutableDictionary *reachabilityQueries;
+@property (nonatomic, assign) NSMutableDictionary *reachabilityQueries;
 
 // This class is intended to be used as a singleton.
 + (Reachability *)sharedReachability;
@@ -113,7 +113,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 // Keep around each network reachability query object so that we can
 // register for updates from those objects.
 @property (nonatomic) SCNetworkReachabilityRef reachabilityRef;
-@property (nonatomic, strong) NSString *hostNameOrAddress;
+@property (nonatomic, retain) NSString *hostNameOrAddress;
 @property (nonatomic) CFMutableArrayRef runLoops;
 
 - (void)scheduleOnRunLoop:(NSRunLoop *)inRunLoop;

@@ -21,7 +21,7 @@
     [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
     [numberFormatter setLocale:self.priceLocale];
     NSString *formattedString = [numberFormatter stringFromNumber:self.price];
-    //[numberFormatter release];
+    [numberFormatter release];
     return formattedString;
 }
 
@@ -79,13 +79,13 @@ SINGLETON_IMPLEMENTATION(ECPurchase);
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"iap" message:result
 										delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	//[alert release];
+	[alert release];
 	[_productDelegate didReceivedProducts:products];
 #else
 	[_productDelegate didReceivedProducts:products];
 
 #endif   
-	//[_productsRequest release];
+	[_productsRequest release];
 }
 
 -(void)addTransactionObserver{
@@ -142,7 +142,7 @@ SINGLETON_IMPLEMENTATION(ECPurchase);
 -(void)verifyReceipt:(SKPaymentTransaction *)transaction
 {
 	_networkQueue = [ASINetworkQueue queue];
-	//[_networkQueue retain];
+	[_networkQueue retain];
 	NSURL *verifyURL = [NSURL URLWithString:VAILDATING_RECEIPTS_URL];
 	ECPurchaseHTTPRequest *request = [[ECPurchaseHTTPRequest alloc] initWithURL:verifyURL];
 	[request setProductIdentifier:transaction.payment.productIdentifier];
@@ -164,7 +164,7 @@ SINGLETON_IMPLEMENTATION(ECPurchase);
 	NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:recepit, @"receipt-data", nil];
 	SBJsonWriter *writer = [SBJsonWriter new];
 	[request appendPostData: [[writer stringWithObject:data] dataUsingEncoding: NSUTF8StringEncoding]];
-	//[writer release];
+	[writer release];
 	[_networkQueue addOperation: request];
 	[_networkQueue go];
 }
@@ -174,7 +174,7 @@ SINGLETON_IMPLEMENTATION(ECPurchase);
 	NSString *response = [request responseString];
 	SBJsonParser *parser = [SBJsonParser new];
 	NSDictionary* jsonData = [parser objectWithString: response];
-	//[parser release];
+	[parser release];
 	NSString *status = [jsonData objectForKey: @"status"];
 	if ([status intValue] == 0) {
 		NSDictionary *receipt = [jsonData objectForKey: @"receipt"];
@@ -202,5 +202,11 @@ SINGLETON_IMPLEMENTATION(ECPurchase);
 	return _storeObserver.failedTrans;
 }
 
+-(void)dealloc
+{
+	RELEASE_SAFELY(_networkQueue);
+	RELEASE_SAFELY(_storeObserver);
+	[super dealloc];
+}
 
 @end

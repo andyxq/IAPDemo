@@ -23,18 +23,23 @@ static NSLock *readLock = nil;
 
 + (id)inputStreamWithFileAtPath:(NSString *)path
 {
-	ASIInputStream *stream = [[self alloc] init];
+	ASIInputStream *stream = [[[self alloc] init] autorelease];
 	[stream setStream:[NSInputStream inputStreamWithFileAtPath:path]];
 	return stream;
 }
 
 + (id)inputStreamWithData:(NSData *)data
 {
-	ASIInputStream *stream = [[self alloc] init];
+	ASIInputStream *stream = [[[self alloc] init] autorelease];
 	[stream setStream:[NSInputStream inputStreamWithData:data]];
 	return stream;
 }
 
+- (void)dealloc
+{
+	[stream release];
+	[super dealloc];
+}
 
 
 // Ok, so this works, but I don't really understand why.
